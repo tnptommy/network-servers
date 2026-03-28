@@ -36,7 +36,7 @@ Each lab covers one topic with tasks, commands, and notes across **Windows Serve
 
 ## 💡 How to use these notes
 
-1. Set up your VMware environment before each lab (see [Lab 1a](./lab-01/lab-1a/README.md))
+1. Set up your VMware environment before each lab (see [Lab 1a](./lab-01/lab-1a.md))
 2. Read each task file in order
 3. Try every command — do not just read
 4. Record your observations in your **Learning Journal**
@@ -49,9 +49,10 @@ Each lab covers one topic with tasks, commands, and notes across **Windows Serve
 network-servers/
 ├── README.md
 ├── lab-01/   ← Introduction & Startup
-│   ├── lab-1a/   ← VMware Lab familiarisation
-│   ├── lab-1b/   ← System startup, runlevels & log files (CentOS)
-│   └── lab-1c/   ← Windows Server initial configuration
+│   ├── README.md
+│   ├── lab-1a.md   ← VMware: import OVA, start/stop VMs
+│   ├── lab-1b.md   ← CentOS: GRUB2, runlevels, journalctl
+│   └── lab-1c.md   ← Windows Server: Server Manager, CLI
 ├── lab-02/   ← Installation & Configuration
 ├── lab-03/   ← Networking & Services
 ├── lab-04/   ← Advanced Networking (Dynamic Networking)
