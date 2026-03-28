@@ -22,14 +22,28 @@ Start your Windows Server VM in VMware Player (see [Lab 1a](./lab-1a.md) for ins
 
 ---
 
-### Log in
+### Step 1 — Boot the VM and reach the login screen
 
-Windows Server will boot to a GUI and prompt for the Administrator password.
+Windows Server will boot to a GUI showing a lock screen with a prompt to press Ctrl+Alt+Delete.
 
-You need to press **Ctrl+Alt+Delete** to bring up the login prompt — but your host machine may intercept this key combination. Use one of these alternatives instead:
+> 📸 *Screenshot — Windows Server lock screen / Ctrl+Alt+Delete prompt*
+> ![Windows Server lock screen](./screenshots/1c-01-lock-screen.png)
 
-- Press **Ctrl+Alt+Insert**
-- Or use the VMware menu: **VM → Send Ctrl+Alt+Delete**
+---
+
+### Step 2 — Send Ctrl+Alt+Delete to the VM
+
+Your host machine may intercept **Ctrl+Alt+Delete** before it reaches the VM. Use one of these alternatives:
+
+- Press **Ctrl+Alt+Insert** on your keyboard, or
+- Use the VMware menu: **VM → Send Ctrl+Alt+Delete**
+
+> 📸 *Screenshot — VMware VM menu showing Send Ctrl+Alt+Delete option*
+> ![VMware VM menu](./screenshots/1c-02-vmware-menu-cad.png)
+
+---
+
+### Step 3 — Log in as Administrator
 
 Enter the Administrator password:
 
@@ -37,144 +51,232 @@ Enter the Administrator password:
 student123!
 ```
 
+> 📸 *Screenshot — Windows Server Administrator password entry screen*
+> ![Administrator login](./screenshots/1c-03-admin-login.png)
+
+---
+
+### Step 4 — Server Manager Dashboard
+
 You should now see the desktop and the **Server Manager → Dashboard** panel.
 
----
-
-## 📸 Screenshot — Windows Server login and dashboard
-
-> *(Add your screenshot of the Server Manager Dashboard here)*
+> 📸 *Screenshot — Server Manager Dashboard*
+> ![Server Manager Dashboard](./screenshots/1c-04-server-manager-dashboard.png)
 
 ---
 
-### Initial configuration checklist
+### Step 5 — Open Local Server properties
 
-Click **Local Server** in the left panel of Server Manager. Check and change the following:
+Click **Local Server** in the left panel of Server Manager.
 
-**1. Time zone** — Set to `(UTC+10:00) Canberra, Melbourne, Sydney` if not already set.
+> 📸 *Screenshot — Local Server panel in Server Manager*
+> ![Local Server panel](./screenshots/1c-05-local-server.png)
 
-**2. Network** — Ethernet0 and Ethernet1 should both show `IPv4 address assigned by DHCP, IPv6 enabled`.  
-Click `IPv4 address assigned by DHCP` to open the detailed Network Connections configuration page.
+---
 
-**3. Computer name** — Change to something more descriptive (e.g. `chrisserver`). Leave the workgroup as `WORKGROUP` for now. You will likely be prompted to reboot — you can do this now or after you finish exploring.
+### Step 6 — Check and set the time zone
 
-**4. Windows Update** — Note when updates were last installed or checked, and how Windows Update is configured. A server is different from a workstation — **you do not want the server rebooting itself unexpectedly** due to updates being installed.
+Find the **Time Zone** field. If it is not set to `(UTC+10:00) Canberra, Melbourne, Sydney`, click it to change it.
+
+> 📸 *Screenshot — Time Zone setting in Local Server*
+> ![Time zone setting](./screenshots/1c-06-timezone.png)
+
+> 📸 *Screenshot — Time Zone change dialog with UTC+10 selected*
+> ![Time zone change dialog](./screenshots/1c-07-timezone-dialog.png)
+
+---
+
+### Step 7 — Check network configuration
+
+Find the **Ethernet** entries. Both Ethernet0 and Ethernet1 should show `IPv4 address assigned by DHCP, IPv6 enabled`.
+
+Click the link to open the **Network Connections** page and view detailed configuration.
+
+> 📸 *Screenshot — Network entries in Local Server showing DHCP*
+> ![Network DHCP entries](./screenshots/1c-08-network-dhcp.png)
+
+> 📸 *Screenshot — Network Connections detail page*
+> ![Network Connections page](./screenshots/1c-09-network-connections.png)
+
+📓 **Journal:** Record the IP address, subnet mask, and default gateway for both Ethernet adapters.
+
+---
+
+### Step 8 — Change the computer name
+
+Click the current **Computer Name** in Local Server. Change it to something descriptive (e.g. `chrisserver`).
+
+Leave the workgroup as `WORKGROUP` for now.
+
+> 📸 *Screenshot — System Properties dialog for changing computer name*
+> ![System Properties computer name](./screenshots/1c-10-computer-name.png)
+
+> 📸 *Screenshot — Confirmation prompt to reboot after renaming*
+> ![Reboot prompt after rename](./screenshots/1c-11-rename-reboot-prompt.png)
+
+You will be prompted to reboot. You can reboot now or after you finish exploring — but do it before proceeding to Task 2.
+
+---
+
+### Step 9 — Check Windows Update settings
+
+Scroll down in Local Server to find the **Windows Update** section. Note:
+
+- When updates were last installed
+- When updates were last checked
+- How Windows Update is configured (automatic vs manual)
+
+> 📸 *Screenshot — Windows Update section in Local Server*
+> ![Windows Update settings](./screenshots/1c-12-windows-update.png)
+
+📓 **Journal:** Record the update settings. Why is it important that a server does **not** reboot itself automatically to install updates?
+
+---
+
+### Step 10 — View events, services, and logs
+
+Scroll further down in Local Server to view the **Events**, **Services**, and **Performance** sections.
+
+> 📸 *Screenshot — Events and Services sections in Local Server (scrolled down)*
+> ![Events and Services](./screenshots/1c-13-events-services.png)
 
 📓 **Journal:** Record all the details you changed and anything else you find noteworthy.
 
-Scroll down in Local Server to view **events (logs)**, **services**, and other information.
-
-If you have not yet rebooted after changing the computer name, do so now before continuing.
-
----
-
-## 📸 Screenshot — Local Server properties
-
-> *(Add your screenshot of the Local Server configuration panel here)*
+Reboot your server now if you have not done so already after changing the computer name.
 
 ---
 
 ## Task 2: Server Management
 
-The Server Manager is the main console for managing many aspects of your Windows Server. It allows you to:
+The Server Manager is the main console for managing Windows Server. It allows you to:
 
 1. View and update the **server summary** — computer info, security settings
 2. View and update **server roles**
 3. View and update **server features**
 4. Access **common resources**, support links, and the **Best Practices Analyzer**
 
-The **Tools** menu at the top gives access to additional management tools:
-
-5. **Diagnostics** — Event Viewer, Device Manager
-6. **Configuration** — Task Scheduler, Firewall, Services, Computer Management
-7. **Storage** — Backup and Disk Management tools
+The **Tools** menu at the top provides access to additional management tools — Diagnostics, Configuration, Storage, and more.
 
 ---
 
-### Activities
+### Activity 1 — Explore Device Manager
 
-**Activity 1 — Device Manager**
+Open **Device Manager** via: Tools → Computer Management → Device Manager (or search for it).
 
-Find and open Device Manager (hint: it is under the Tools menu).
+> 📸 *Screenshot — Device Manager showing installed hardware*
+> ![Device Manager](./screenshots/1c-14-device-manager.png)
 
-- What hardware is installed on this machine?
-- Is it similar to the CentOS VM's hardware?
-
-📓 **Journal:** Write down all hardware you find.
+📓 **Journal:**
+- What hardware is installed on this Windows Server VM?
+- Is it similar to the CentOS VM hardware?
+- Record all devices listed.
 
 ---
 
-**Activity 2 — Network address**
+### Activity 2 — Find your network IP address
 
-- What is the IP address of this server that connects to the internet?
+Open the **Network Connections** page (via Local Server → Ethernet link, or via Tools → Computer Management).
+
+> 📸 *Screenshot — Network connection details showing IP address*
+> ![Network IP address](./screenshots/1c-15-network-ip.png)
+
+📓 **Journal:**
+- What is the IP address connecting this server to the internet?
 - Compare it against your CentOS server — are they on the same subnet?
 - What is the subnet mask and default gateway?
 
-📓 **Journal:** Record the IP address, subnet mask, and gateway for both Ethernet0 and Ethernet1.
-
 ---
 
-**Activity 3 — Add features**
+### Activity 3 — Add Telnet Client and Simple TCP/IP Services features
 
-Navigate to **Manage → Add Roles and Features** and add:
+Navigate to **Manage → Add Roles and Features**.
+
+> 📸 *Screenshot — Add Roles and Features Wizard opening page*
+> ![Add Roles and Features wizard](./screenshots/1c-16-add-features-wizard.png)
+
+Click through to the **Features** page (not Roles). Find and tick:
 
 - `Telnet Client`
 - `Simple TCP/IP Services`
 
-> This starts common TCP/IP services including the **echo** (port 7), **daytime** (port 13), and **quote of the day** (port 17) services.  
-> Do **not** change Server Roles at this time.
+> 📸 *Screenshot — Features page with Telnet Client ticked*
+> ![Telnet Client feature ticked](./screenshots/1c-17-telnet-client.png)
 
-Once installed, open the **Services panel** (find it under Tools) and scroll down to find **Simple TCP/IP Services**. If it is not started, start it using:
+> 📸 *Screenshot — Features page with Simple TCP/IP Services ticked*
+> ![Simple TCP/IP Services ticked](./screenshots/1c-18-simple-tcpip.png)
 
-- The green arrow button, or
-- The **More Actions** panel on the left, or
-- Right-click → Start
+Click **Install** and wait for installation to complete.
 
----
+> 📸 *Screenshot — Installation progress / completion screen*
+> ![Feature installation complete](./screenshots/1c-19-install-complete.png)
 
-## 📸 Screenshot — Add Roles and Features wizard
-
-> *(Add your screenshot of adding Telnet Client and Simple TCP/IP Services here)*
+> ⚠️ Do **not** change Server Roles at this time.
 
 ---
 
-**Activity 4 — Test with telnet**
+### Activity 3 (continued) — Verify the service is running
 
-Open **Command Prompt** from the Start menu: **Windows System → Command Prompt**.
+Open the **Services panel**: Tools → Services.
 
-> Use Command Prompt, not PowerShell — this exercise works better with Command Prompt so you can see the telnet output.
+Scroll down to find **Simple TCP/IP Services**. If it is not started, start it using one of:
+
+- The green **Start** arrow in the toolbar
+- The **More Actions** panel on the left
+- Right-click → **Start**
+
+> 📸 *Screenshot — Services panel with Simple TCP/IP Services visible*
+> ![Services panel Simple TCP/IP](./screenshots/1c-20-services-panel.png)
+
+> 📸 *Screenshot — Simple TCP/IP Services showing Running status*
+> ![Simple TCP/IP Services running](./screenshots/1c-21-tcpip-running.png)
+
+---
+
+### Activity 4 — Test with telnet from the server itself
+
+Open **Command Prompt** from Start Menu → **Windows System → Command Prompt**.
+
+> Use Command Prompt, not PowerShell — the output of telnet is clearer in Command Prompt.
 
 ```cmd
 telnet localhost 13
+```
+
+Port 13 = **Daytime** — returns the current date and time.
+
+> 📸 *Screenshot — Command Prompt showing telnet localhost 13 output*
+> ![telnet localhost 13](./screenshots/1c-22-telnet-13.png)
+
+```cmd
 telnet localhost 17
 ```
 
-Port 13 returns the current **daytime**. Port 17 returns a **quote of the day**.
+Port 17 = **Quote of the Day** — returns a random quote.
+
+> 📸 *Screenshot — Command Prompt showing telnet localhost 17 output*
+> ![telnet localhost 17](./screenshots/1c-23-telnet-17.png)
 
 ---
 
-**Activity 5 — Test from your host workstation**
+### Activity 5 — Test from your host workstation
 
-From your host workstation, try connecting to the server's IP address:
+From your **host workstation** (not the VM), open a command prompt and try:
 
 ```cmd
 telnet <server-ip> 13
 telnet <server-ip> 17
 ```
 
+> 📸 *Screenshot — Host workstation command prompt showing telnet attempt to server*
+> ![telnet from host to server](./screenshots/1c-24-telnet-from-host.png)
+
 📓 **Journal question:** Can you connect from the host workstation? Why or why not? (Hint: think about the Windows Firewall.)
-
----
-
-## 📸 Screenshot — telnet test output
-
-> *(Add your screenshot of the telnet output here)*
 
 ---
 
 ## Task 3: Command Line
 
-Virtually all Windows Server configuration can be done from the command line. Key tools include:
+Virtually all Windows Server configuration can be done from the command line.
 
 | Command | Purpose |
 | --- | --- |
@@ -182,7 +284,7 @@ Virtually all Windows Server configuration can be done from the command line. Ke
 | `netdom` | Manage domain settings |
 | `netsh` | Manage local network configuration |
 
-Get help on any `net` command:
+Get help on any `net` subcommand:
 
 ```cmd
 net help <command>
@@ -190,55 +292,73 @@ net help <command>
 
 ---
 
-### Activity 1 — View and control services
-
-List all currently running services:
+### Activity 1 — View running services
 
 ```cmd
 net start
 ```
 
-📓 **Journal:** Is **Simple TCP/IP Services** in the list?
+> 📸 *Screenshot — Command Prompt showing net start output listing all running services*
+> ![net start output](./screenshots/1c-25-net-start.png)
 
-Stop the service:
+📓 **Journal:** Is **Simple TCP/IP Services** listed in the output?
+
+---
+
+### Stop the service and verify
 
 ```cmd
 net stop "Simple TCP/IP Service"
 ```
 
-Test that it is no longer reachable — try `telnet localhost 13` again. Does it connect?
+> 📸 *Screenshot — Command Prompt showing net stop output*
+> ![net stop Simple TCP/IP](./screenshots/1c-26-net-stop.png)
 
-Restart the service:
+Now test that port 13 is no longer reachable:
+
+```cmd
+telnet localhost 13
+```
+
+> 📸 *Screenshot — telnet failing after service is stopped*
+> ![telnet fails after stop](./screenshots/1c-27-telnet-fail.png)
+
+---
+
+### Restart the service
 
 ```cmd
 net start "Simple TCP/IP Service"
 ```
 
+> 📸 *Screenshot — Command Prompt showing net start (restart) output*
+> ![net start restart](./screenshots/1c-28-net-start-restart.png)
+
+Verify it is working again with `telnet localhost 13`.
+
 ---
 
-### Activity 2 — Allow a port through the firewall
+### Activity 2 — Allow a port through the Windows Firewall
 
-Allow the **Quote of the Day** (port 17) through the Windows Firewall. Enter the following as a **single line**:
+Allow the **Quote of the Day** (port 17) through the firewall. Enter the entire command below as a **single line**:
 
 ```cmd
 netsh advfirewall firewall add rule name="TCP Port 17" dir=in action=allow protocol=TCP localport=17
 ```
 
-Now try telnetting to port 17 from your host workstation again:
+> 📸 *Screenshot — Command Prompt showing netsh advfirewall command and confirmation*
+> ![netsh firewall rule added](./screenshots/1c-29-netsh-firewall.png)
+
+Now test from your host workstation again:
 
 ```cmd
 telnet <server-ip> 17
 ```
 
-📓 **Journal:** Did it work this time? What did the firewall rule change?
+> 📸 *Screenshot — Host workstation successfully telnetting to port 17 after firewall rule added*
+> ![telnet from host port 17 success](./screenshots/1c-30-telnet-host-port17.png)
 
-Use the internet to explore the full syntax of `netsh advfirewall` commands.
-
----
-
-## 📸 Screenshot — Firewall rule and telnet from host
-
-> *(Add your screenshot of the successful telnet from the host workstation here)*
+📓 **Journal:** Did it work this time? What did the firewall rule change? Use the internet to explore the full syntax of `netsh advfirewall` commands.
 
 ---
 
@@ -248,15 +368,17 @@ Windows Server has excellent built-in documentation:
 
 - Use the **Help** menu inside Server Manager
 - Server Manager links directly to Microsoft documentation
-- Internet search is also your friend
 
 **Internet Explorer Enhanced Security Configuration**
 
-You may notice Internet Explorer has **Enhanced Security Configuration** enabled by default. When browsing, you may get prompts to add sites to the trusted list. Generally you can cancel these prompts — they are usually blocking ActiveX, Flash, or popups.
+Internet Explorer on Windows Server has Enhanced Security Configuration (IE ESC) enabled by default. When browsing, you may see prompts to add sites to the trusted zone — these are usually blocking ActiveX, Flash, or popups. You can generally cancel them.
 
-If IE seems to block too much, you can adjust the Enhanced Security Configuration settings — opening a fresh IE window will show you links explaining how to do this.
+If IE seems to block too much, you can adjust the Enhanced Security Configuration settings. Opening a fresh IE window will show you links explaining how.
 
-📓 **Journal:** Note anything you find interesting, and record any changes you make to the IE Enhanced Security Configuration.
+> 📸 *Screenshot — Internet Explorer Enhanced Security Configuration prompt or settings*
+> ![IE Enhanced Security](./screenshots/1c-31-ie-esc.png)
+
+📓 **Journal:** Note what you find and record any changes you make to the IE Enhanced Security Configuration settings.
 
 ---
 
@@ -264,15 +386,19 @@ If IE seems to block too much, you can adjust the Enhanced Security Configuratio
 
 Shut down your VM via the **Start Menu**.
 
-> **Note:** Windows Server requires you to enter a **reason for shutdown**. This is good practice — it creates an audit trail so future admins can understand why the server was shut down.
-
-Choose a topic (e.g. `Other (Planned)`) and enter a brief descriptive reason before shutting down.
+> 📸 *Screenshot — Start Menu with Shutdown option visible*
+> ![Start Menu shutdown](./screenshots/1c-32-start-menu-shutdown.png)
 
 ---
 
-## 📸 Screenshot — Windows Server shutdown dialog
+Windows Server requires you to enter a **reason for shutdown** before it will proceed.
 
-> *(Add your screenshot of the shutdown reason dialog here)*
+Choose a topic (e.g. `Other (Planned)`) and enter a brief descriptive reason.
+
+> 📸 *Screenshot — Shutdown Event Tracker dialog with reason entered*
+> ![Shutdown reason dialog](./screenshots/1c-33-shutdown-reason.png)
+
+📓 **Journal:** This is good practice — it creates an audit trail so future admins can understand why the server was shut down.
 
 ---
 
@@ -281,8 +407,9 @@ Choose a topic (e.g. `Other (Planned)`) and enter a brief descriptive reason bef
 | Tip | Details |
 | --- | --- |
 | Login shortcut inside VM | Press `Ctrl+Alt+Insert` instead of `Ctrl+Alt+Delete` |
-| Suspend VM | VMware menu: **VM → Power → Suspend** — saves memory snapshot to `*.vmem` and `*.vmss` |
-| Command help | `net help <command>` for syntax of any `net` subcommand |
+| Send Ctrl+Alt+Del via VMware | VMware menu: **VM → Send Ctrl+Alt+Delete** |
+| Suspend VM (save state) | VMware menu: **VM → Power → Suspend** — saves to `*.vmem` and `*.vmss` |
+| Get command help | `net help <command>` for syntax of any net subcommand |
 | Find Services panel | Server Manager → Tools → Services |
 | Find Device Manager | Server Manager → Tools → Computer Management → Device Manager |
 
@@ -293,10 +420,10 @@ Choose a topic (e.g. `Other (Planned)`) and enter a brief descriptive reason bef
 | Command | What it does |
 | --- | --- |
 | `net start` | List all currently running services |
-| `net start "<service name>"` | Start a named service |
-| `net stop "<service name>"` | Stop a named service |
-| `net help <command>` | Show syntax and help for a net subcommand |
-| `netsh advfirewall firewall add rule ...` | Add a Windows Firewall inbound rule |
+| `net start "<service>"` | Start a named service |
+| `net stop "<service>"` | Stop a named service |
+| `net help <command>` | Show help and syntax for a net subcommand |
+| `netsh advfirewall firewall add rule ...` | Add an inbound Windows Firewall rule |
 | `telnet <host> <port>` | Test TCP connectivity to a host and port |
 
 ---

@@ -19,58 +19,88 @@
 
 Boot up your CentOS VM (reboot it if already running).
 
-You will see the BIOS screen briefly, then the **GRUB2 boot loader** will appear with the message `Press any key . . .` — press a key to interrupt the boot process.
+You will see the BIOS screen briefly, then the **GRUB2 boot loader** will appear with the message `Press any key . . .`
 
-> It may take several attempts to get your timing right.
+Interrupt the boot process by pressing a key when you see this message.
 
-### Steps to enter single-user mode
+> ⚠️ It may take several attempts to get your timing right.
 
-**1.** The GRUB2 screen shows all available kernels. You can install additional kernels by editing `/etc/grub2.cfg` later. Highlight the desired kernel and press **`E`** to edit its boot commands.
+---
 
-**2.** The screen changes to show several lines of boot configuration. Use the arrow keys to move to the line that starts with `linux....`. We want to pass a new option to the kernel to tell it to boot with just a simple Unix shell.
+### Step 1 — Get to the GRUB2 menu
 
-**3.** On that line, find the word `ro` as a word by itself. You need to:
+When GRUB2 appears, you will see a list of available kernels. Highlight the desired kernel using the arrow keys.
+
+> 📸 *Screenshot — GRUB2 boot loader kernel selection screen*
+> ![GRUB2 kernel list](./screenshots/1b-01-grub2-menu.png)
+
+---
+
+### Step 2 — Edit the kernel boot entry
+
+Press **`E`** to edit the boot commands for the selected kernel.
+
+The screen changes to show several lines of boot configuration.
+
+> 📸 *Screenshot — GRUB2 kernel edit screen (lines of boot config)*
+> ![GRUB2 edit screen](./screenshots/1b-02-grub2-edit.png)
+
+---
+
+### Step 3 — Modify the boot parameters
+
+Using the arrow keys, move the cursor to the line that starts with `linux....`.
+
+On this line, find the word `ro` as a word by itself. Make the following change:
 
 ```
 Delete:   ro
 Type:     rw init=/sysroot/bin/sh
 ```
 
-**4.** When you have typed it correctly, press **`Ctrl+X`** to boot with your new parameters.
+The line should now contain `rw init=/sysroot/bin/sh` where `ro` used to be.
+
+> 📸 *Screenshot — The linux line with ro replaced by rw init=/sysroot/bin/sh*
+> ![Modified boot parameters](./screenshots/1b-03-grub2-modified.png)
 
 ---
+
+### Step 4 — Boot with new parameters
+
+Press **`Ctrl+X`** to boot the machine with your modified parameters.
 
 The machine will now boot and give you a **root shell without asking for a password**.
 
-- Changing `ro` (read-only) to `rw` (read-write) means the filesystem is mounted in writable mode — you can edit files if needed
+> 📸 *Screenshot — Single-user root shell prompt after booting*
+> ![Single-user root shell](./screenshots/1b-04-single-user-shell.png)
+
+---
+
+### What just happened?
+
+- Changing `ro` (read-only) to `rw` (read-write) means the filesystem is mounted in **writable** mode — you can edit files if needed
 - The actual system files are inside `/sysroot` when you are in single-user mode
+- Single-user mode is mainly used for **system maintenance** — when you need to be sure no one else is using the system and only a minimum number of processes are running
 
-Single-user mode is mainly used for **system maintenance** — when you need to be sure no one else is using the system and only a minimum number of processes are running.
+📓 **Journal:** Document the full step-by-step process of booting into single-user mode using GRUB2.
 
----
+Also note the following security implications:
 
-## 📸 Screenshot — GRUB2 edit screen
-
-> *(Add your screenshot of the GRUB2 kernel edit screen here)*
-
----
-
-📓 **Journal:** Document the full process of booting into single-user mode using GRUB2.
-
-Also note:
 - This process did **not** require a password — this is also how **password recovery** works on Linux via GRUB2
-- **Security risk:** If an attacker has physical access to your machine, they can do the same thing. GRUB2 can be password-protected to prevent this
+- **Security risk:** If an attacker has physical access to your machine, they can do the same. GRUB2 can be password-protected to prevent this
 - There is also a **rescue mode** which still gives a single-user environment but **does** require the root password
 
 ---
 
 ## Task 2: Explore and Modify System Startup
 
-From single-user mode, exit back to normal graphical mode using:
+From single-user mode, exit back to normal graphical mode:
 
 ```bash
 reboot
 ```
+
+---
 
 ### Systemd targets (formerly runlevels)
 
@@ -78,16 +108,14 @@ There are different modes the system can boot into. Previously these were called
 
 | Target | Description |
 | --- | --- |
-| `emergency.target` | Emergency recovery — minimal environment, similar to single-user shell |
-| `rescue.target` | Rescue mode — for system recovery, **requires root password** |
-| `multi-user.target` | Multi-user mode with no graphical login |
+| `emergency.target` | Emergency recovery — minimal environment, like single-user shell |
+| `rescue.target` | Rescue mode — system recovery, **requires root password** |
+| `multi-user.target` | Multi-user mode, no graphical login |
 | `graphical.target` | Full graphical mode (default) |
 
 ---
 
-### Check and change the default target
-
-Check the current default boot mode:
+### Step 1 — Check the current default target
 
 ```bash
 systemctl get-default
@@ -95,175 +123,246 @@ systemctl get-default
 
 > Should return `graphical.target`.
 
-Change the default with:
+> 📸 *Screenshot — Terminal showing output of systemctl get-default*
+> ![systemctl get-default output](./screenshots/1b-05-get-default.png)
 
-```bash
-systemctl set-default multi-user.target
-```
+---
 
-Switch to a target **immediately** (without rebooting):
+### Step 2 — Switch to multi-user mode (no GUI)
 
 ```bash
 systemctl isolate multi-user.target
 ```
 
-Switch back:
+> 📸 *Screenshot — Screen after isolating multi-user.target (GUI disappears)*
+> ![multi-user.target active](./screenshots/1b-06-multi-user-target.png)
+
+📓 **Journal:** What happened visually? What disappeared from the screen?
+
+---
+
+### Step 3 — Switch back to graphical mode
 
 ```bash
 systemctl isolate graphical.target
 ```
 
-Also try:
+> 📸 *Screenshot — Screen after returning to graphical.target (GUI restored)*
+> ![graphical.target restored](./screenshots/1b-07-graphical-target.png)
+
+---
+
+### Step 4 — Try emergency and rescue targets
 
 ```bash
 systemctl isolate emergency.target
+```
+
+> 📸 *Screenshot — emergency.target environment*
+> ![emergency.target](./screenshots/1b-08-emergency-target.png)
+
+```bash
 systemctl isolate rescue.target
+```
+
+> 📸 *Screenshot — rescue.target prompt (requires root password)*
+> ![rescue.target](./screenshots/1b-09-rescue-target.png)
+
+📓 **Journal:** Document what happens with each target. What is different between them? What does each one give you access to?
+
+---
+
+### Step 5 — Change the default target permanently
+
+```bash
+systemctl set-default multi-user.target
+```
+
+> 📸 *Screenshot — Terminal showing systemctl set-default output*
+> ![systemctl set-default](./screenshots/1b-10-set-default.png)
+
+Change it back to graphical:
+
+```bash
+systemctl set-default graphical.target
 ```
 
 ---
 
-## 📸 Screenshot — Target switching
-
-> *(Add your screenshot of switching between targets here)*
-
----
-
-📓 **Journal:** Document what happens visually when you isolate each target. What changes on screen? What disappears?
-
----
-
-### Managing services with systemctl
-
-`systemctl` is the command that manages the startup process and which services run at boot time. Now that we have seen targets, let's explore **services**.
-
-List all units (targets, services, and other types):
+### Step 6 — List all units
 
 ```bash
 systemctl list-unit-files
 ```
 
-For services, this shows whether they are **enabled** (starts at boot) or **disabled** (does not start at boot).
+This shows all **units** — units can be targets, services, or a few other types. For services, it shows whether they are **enabled** (starts at boot) or **disabled** (does not start at boot).
+
+> 📸 *Screenshot — Terminal showing systemctl list-unit-files output*
+> ![systemctl list-unit-files](./screenshots/1b-11-list-unit-files.png)
 
 📓 **Journal question:** Is the `sshd` service enabled or disabled by default? What about `httpd`?
 
 ---
 
-Check a single service's enabled/disabled state:
+### Step 7 — Check individual service status
+
+Check if a single service is enabled (will start at boot):
 
 ```bash
 systemctl is-enabled sshd
 ```
 
-Check if a service is currently running (active) or stopped (inactive):
+> 📸 *Screenshot — Terminal showing systemctl is-enabled sshd output*
+> ![is-enabled sshd](./screenshots/1b-12-is-enabled.png)
+
+Check if a service is currently active (running right now):
 
 ```bash
 systemctl is-active sshd
 ```
 
-Start, stop, enable, and disable services:
-
-```bash
-systemctl start <servicename>
-systemctl stop <servicename>
-systemctl enable <servicename>
-systemctl disable <servicename>
-```
-
-After each change, verify using `is-enabled` and `is-active`.
-
-📓 **Journal:** Document each command you run, the output you get, and what it means.
+> 📸 *Screenshot — Terminal showing systemctl is-active sshd output*
+> ![is-active sshd](./screenshots/1b-13-is-active.png)
 
 ---
 
-## 📸 Screenshot — systemctl output
+### Step 8 — Start, stop, enable, and disable services
 
-> *(Add your screenshot of systemctl list-unit-files or service status here)*
+```bash
+systemctl start sshd
+systemctl stop sshd
+systemctl enable sshd
+systemctl disable sshd
+```
+
+After each command, verify the change using `is-enabled` and `is-active`.
+
+> 📸 *Screenshot — Terminal showing start/stop/enable/disable commands and verification*
+> ![service start stop enable disable](./screenshots/1b-14-service-control.png)
+
+📓 **Journal:** Run each command and record the output. What does each one do? What is the difference between `start` and `enable`?
 
 ---
 
 ## Task 3: Examine System Log Information
 
-### Kernel ring buffer
-
-Run:
+### Step 1 — View the kernel ring buffer with dmesg
 
 ```bash
 dmesg
 ```
 
-Also try:
+> 📸 *Screenshot — Terminal showing dmesg output (hardware/driver messages)*
+> ![dmesg output](./screenshots/1b-15-dmesg.png)
+
+Also compare with:
 
 ```bash
 journalctl --dmesg
 ```
 
-📓 **Journal:** What kinds of information appear? Hardware detection? Driver loading? Error messages?
+> 📸 *Screenshot — Terminal showing journalctl --dmesg output*
+> ![journalctl --dmesg](./screenshots/1b-16-journalctl-dmesg.png)
+
+📓 **Journal:** What kinds of information appear? Hardware detection? Driver loading? Error messages? What is the difference between `dmesg` and `journalctl --dmesg`?
 
 ---
 
-### System log files
+### Step 2 — Examine /var/log/messages
 
 ```bash
 cat /var/log/messages
 ```
 
+> 📸 *Screenshot — Terminal showing /var/log/messages content*
+> ![/var/log/messages](./screenshots/1b-17-var-log-messages.png)
+
+📓 **Journal:** What kinds of messages appear in this file?
+
+> 💡 **Hint:** If you cannot read a file, check its permissions with `ls -l`. You may need to switch to root with `su` and use `chmod` to change permissions.
+
+---
+
+### Step 3 — Examine /var/log/secure
+
 ```bash
 cat /var/log/secure
 ```
 
-📓 **Journal:** What kinds of messages appear in each file? What is the difference between them?
+> 📸 *Screenshot — Terminal showing /var/log/secure content*
+> ![/var/log/secure](./screenshots/1b-18-var-log-secure.png)
 
-> 💡 **Hint:** If you cannot read a file, check its permissions with `ls -l`. You may need to `su` as root and use `chmod` to change permissions.
+📓 **Journal:** What is in this file? How does it differ from `/var/log/messages`?
 
 ---
 
-### Using journalctl
-
-`journalctl` queries the systemd journal — the central log for everything managed by systemd.
-
-Try each of the following commands and document what they show in your Learning Journal. If you are not sure what a command does, look it up.
+### Step 4 — Query logs by time with journalctl
 
 ```bash
 journalctl --since "10 minutes ago"
 ```
 
+> 📸 *Screenshot — journalctl --since "10 minutes ago" output*
+> ![journalctl since 10 minutes](./screenshots/1b-19-journalctl-since.png)
+
 ```bash
 journalctl --since "2020-01-01" --until "yesterday"
 ```
+
+> 📸 *Screenshot — journalctl with date range output*
+> ![journalctl date range](./screenshots/1b-20-journalctl-daterange.png)
+
+---
+
+### Step 5 — Query logs by unit with journalctl
 
 ```bash
 journalctl -u multi-user.target
 ```
 
+> 📸 *Screenshot — journalctl -u multi-user.target output*
+> ![journalctl -u multi-user](./screenshots/1b-21-journalctl-unit-multiuser.png)
+
 ```bash
 journalctl -u sshd.service
 ```
+
+> 📸 *Screenshot — journalctl -u sshd.service output*
+> ![journalctl -u sshd](./screenshots/1b-22-journalctl-unit-sshd.png)
 
 ```bash
 journalctl -u sshd.service --since "10 minutes ago"
 ```
 
+> 📸 *Screenshot — journalctl -u sshd.service --since output*
+> ![journalctl -u sshd since](./screenshots/1b-23-journalctl-sshd-since.png)
+
+---
+
+### Step 6 — Filter logs by priority
+
 ```bash
 journalctl -p err
 ```
+
+> 📸 *Screenshot — journalctl -p err output (errors only)*
+> ![journalctl -p err](./screenshots/1b-24-journalctl-err.png)
 
 ```bash
 journalctl -p warning
 ```
 
+> 📸 *Screenshot — journalctl -p warning output*
+> ![journalctl -p warning](./screenshots/1b-25-journalctl-warning.png)
+
 ```bash
 journalctl -p err --since "1 hour ago"
 ```
 
----
+> 📸 *Screenshot — journalctl -p err --since "1 hour ago" output*
+> ![journalctl -p err since 1 hour](./screenshots/1b-26-journalctl-err-since.png)
 
-## 📸 Screenshot — journalctl output
-
-> *(Add your screenshot of journalctl output here)*
-
----
-
-📓 **Remember:** Note anything new or interesting you find in your Learning Journal!
+📓 **Journal:** For each `journalctl` command, document what it shows and what the output means. If you are unsure what a flag does, look it up.
 
 ---
 
@@ -272,20 +371,23 @@ journalctl -p err --since "1 hour ago"
 | Command | What it does |
 | --- | --- |
 | `systemctl get-default` | Show the current default boot target |
-| `systemctl set-default <target>` | Change the default boot target permanently |
-| `systemctl isolate <target>` | Switch to a target immediately (no reboot) |
+| `systemctl set-default <target>` | Permanently change the default boot target |
+| `systemctl isolate <target>` | Switch to a target immediately without rebooting |
 | `systemctl list-unit-files` | List all units and their enabled/disabled state |
 | `systemctl is-enabled <svc>` | Check if a service starts automatically at boot |
 | `systemctl is-active <svc>` | Check if a service is currently running |
-| `systemctl start <svc>` | Start a service now |
-| `systemctl stop <svc>` | Stop a service now |
+| `systemctl start <svc>` | Start a service immediately |
+| `systemctl stop <svc>` | Stop a service immediately |
 | `systemctl enable <svc>` | Enable a service to start at boot |
 | `systemctl disable <svc>` | Disable a service from starting at boot |
-| `dmesg` | Show the kernel ring buffer |
+| `dmesg` | View the kernel ring buffer (hardware/driver messages) |
 | `journalctl` | Query the systemd journal (all logs) |
+| `journalctl --dmesg` | View kernel messages via journalctl |
 | `journalctl -u <unit>` | Show logs for a specific unit |
 | `journalctl -p err` | Show only error-level log messages |
+| `journalctl -p warning` | Show only warning-level and above messages |
 | `journalctl --since "..."` | Show logs since a specific time |
+| `journalctl --until "..."` | Show logs up until a specific time |
 
 ---
 
