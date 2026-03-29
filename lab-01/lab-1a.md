@@ -25,7 +25,7 @@ Your host machine needs at least **8GB RAM** (16GB recommended) — VMware needs
 
 ### Step 2 — Download VMware Workstation Pro
 
-Go to the [Broadcom website](https://www.broadcom.com) to download VMware Workstation Pro.
+Go to the [Broadcom website]([https://www.broadcom.com](https://support.broadcom.com/group/ecx/my-dashboard)) to download VMware Workstation Pro.
 
 > ⚠️ The UTS software portal no longer hosts this download.
 
