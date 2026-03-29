@@ -50,19 +50,30 @@ network-servers/
 ├── README.md
 ├── lab-01/   ← Introduction & Startup
 │   ├── README.md
-│   ├── lab-1a.md   ← VMware: import OVA, start/stop VMs
-│   ├── lab-1b.md   ← CentOS: GRUB2, runlevels, journalctl
-│   └── lab-1c.md   ← Windows Server: Server Manager, CLI
+│   ├── lab-1a.md        ← VMware: import OVA, start/stop VMs
+│   ├── lab-1b.md        ← CentOS: GRUB2, runlevels, journalctl
+│   ├── lab-1c.md        ← Windows Server: Server Manager, CLI
+│   └── screenshots/     ← Lab 1 screenshots
 ├── lab-02/   ← Installation & Configuration
+│   └── screenshots/
 ├── lab-03/   ← Networking & Services
+│   └── screenshots/
 ├── lab-04/   ← Advanced Networking (Dynamic Networking)
+│   └── screenshots/
 ├── lab-05/   ← Users, Groups & Directories
+│   └── screenshots/
 ├── lab-06/   ← Domain Name System (DNS)
+│   └── screenshots/
 ├── lab-07/   ← Filesystems & Backup
+│   └── screenshots/
 ├── lab-08/   ← Networked File Systems
+│   └── screenshots/
 ├── lab-09/   ← Cloud & Microsoft Azure — Identity, Access & Security
+│   └── screenshots/
 ├── lab-10/   ← Web Servers
+│   └── screenshots/
 └── lab-11/   ← Printing & Miscellaneous Security Services
+    └── screenshots/
 ```
 
 ---
